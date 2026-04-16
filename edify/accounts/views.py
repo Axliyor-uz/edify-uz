@@ -27,7 +27,12 @@ def login_view(request):
 
         if user:
             login(request, user)
-            return redirect('accounts:profile')
+            if user.role == 'student':
+                return redirect('student:dashboard')
+
+            elif user.role == 'teacher':
+                return redirect('teacher:dashboard')
+            
         else:
             error = "Invalid username or password"
 
@@ -42,3 +47,11 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return redirect('accounts:login')
+
+def home_view(request):
+    if request.user.is_authenticated:
+        if request.user.role == 'student':
+            return redirect('students:dashboard')
+        elif request.user.role == 'teacher':
+            return redirect('teachers:dashboard')
+    return render(request, 'home.html')

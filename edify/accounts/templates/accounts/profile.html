@@ -2,14 +2,17 @@
 <html>
 <head>
     <title>Profile</title>
+    {% load static%}
+    <link rel="stylesheet" href="{% static 'accounts/profile_style.css'%}">
 </head>
 <body>
 
-<h2>Welcome {{ user.username }}</h2>
+<div class="card">
+    <h2>Welcome {{ user.username }}</h2>
+    <p>Your role: <span class="role">{{ user.role }}</span></p>
 
-<p>Role: {{ user.role }}</p>
-
-<a href="{% url 'accounts:logout' %}">Logout</a>
+    <a href="{% url 'accounts:logout' %}">Logout</a>
+</div>
 
 </body>
 </html>
