@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Settings</title>
+</head>
+<body>
+
+<h2>Student Settings</h2>
+<p>Welcome {{ user.username }}</p>
+
+<a href="{% url 'student:dashboard' %}">Dashboard</a>
+
+<a href="{% url 'accounts:logout' %}">Logout</a>
+
+</body>
+</html>

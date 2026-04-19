@@ -1,0 +1,19 @@
+<h2>Your Classes ({{ class_count }})</h2>
+
+<!-- CREATE CLASS FORM -->
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Class</button>
+</form>
+
+<hr>
+
+<!-- SHOW CLASSES -->
+<ul>
+    {% for class in classes %}
+        <li>{{ class.name }}</li>
+    {% empty %}
+        <li>No classes yet</li>
+    {% endfor %}
+</ul>

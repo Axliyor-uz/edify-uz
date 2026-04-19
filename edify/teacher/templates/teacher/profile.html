@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher's Profile</title>
+</head>
+<body>
+
+<h2>Teacher's Profile</h2>
+<p>Welcome {{ user.username }}</p>
+<a href="{% url 'teacher:dashboard' %}">Dashboard</a><br>
+
+<a href="{% url 'accounts:logout' %}">Logout</a>
+
+</body>
+</html>

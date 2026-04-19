@@ -1,0 +1,16 @@
+<h2>Student Courses</h2>
+<p>Welcome {{ user.username }}</p>
+
+<a href="{% url 'student:dashboard' %}">Dashboard</a>
+
+<h3>Your Courses:</h3>
+
+<ul>
+    {% for enroll in enrollments %}
+        <li>{{ enroll.course.name }}</li>
+    {% empty %}
+        <li>No courses yet</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'student:join_course' %}">Join Course</a>

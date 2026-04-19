@@ -34,6 +34,7 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 # Application definition
 
 INSTALLED_APPS = [
+    'classes',
     'home',
     'accounts',
     'student',

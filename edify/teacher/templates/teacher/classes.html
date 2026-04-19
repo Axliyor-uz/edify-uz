@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher's Classes</title>
+</head>
+<body>
+
+<h2>Teacher's Classes</h2>
+<p>Welcome {{ user.username }}</p>
+
+<h3>Total Classes: {{ class_count }}</h3>
+
+<hr>
+
+{% for class in classes %}
+    <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h4>{{ class.name }}</h4>
+
+        <p><strong>Students count:</strong> {{ class.students.count }}</p>
+
+        <ul>
+            {% for student in class.students.all %}
+                <li>{{ student.user.username }}</li>
+            {% empty %}
+                <li>No students yet</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% empty %}
+    <p>No classes created yet.</p>
+{% endfor %}
+
+<a href="{% url 'teacher:dashboard' %}">Dashboard</a>
+
+</body>
+</html>

@@ -8,7 +8,11 @@
 <h2>Student Dashboard</h2>
 <p>Welcome {{ user.username }}</p>
 
-<a href="{% url 'accounts:logout' %}">Logout</a>
+<a href="{% url 'student:profile' %}">Profile</a><br>
+<a href="{% url 'student:settings' %}">Settings</a><br>
+<a href="{% url 'student:courses' %}">Courses</a><br>
+<a href="{% url 'student:teachers' %}">Teachers</a><br>
+
 
 </body>
 </html>

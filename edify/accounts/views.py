@@ -8,8 +8,19 @@ def register_view(request):
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
+
         if form.is_valid():
             user = form.save()
+
+            # 👇 CREATE PROFILE AUTOMATICALLY
+            if user.role == 'teacher':
+                from teacher.models import Teacher
+                Teacher.objects.create(user=user)
+
+            elif user.role == 'student':
+                from student.models import Student
+                Student.objects.create(user=user)
+
             login(request, user)
             return redirect('accounts:profile')
 
@@ -51,7 +62,7 @@ def logout_view(request):
 def home_view(request):
     if request.user.is_authenticated:
         if request.user.role == 'student':
-            return redirect('students:dashboard')
+            return redirect('student:dashboard')
         elif request.user.role == 'teacher':
-            return redirect('teachers:dashboard')
+            return redirect('teacher:dashboard')
     return render(request, 'home.html')

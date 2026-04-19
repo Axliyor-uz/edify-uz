@@ -1,0 +1,12 @@
+<h2>Join a Course</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <select name="course_id">
+        {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Join</button>
+</form>

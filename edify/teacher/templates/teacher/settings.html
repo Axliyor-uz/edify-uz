@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher's  Settings</title>
+</head>
+<body>
+
+<h2>Teacher's  Settings</h2>
+<p>Welcome {{ user.username }}</p>
+
+<a href="{% url 'teacher:dashboard' %}">Dashboard</a>
+
+<a href="{% url 'accounts:logout' %}">Logout</a>
+
+</body>
+</html>

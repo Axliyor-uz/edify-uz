@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teacher Dashboard</title>
+    <title>Teacher's Dashboard</title>
 </head>
 <body>
 
-<h2>Teacher Dashboard</h2>
+<h2>Teacher's Dashboard</h2>
 <p>Welcome {{ user.username }}</p>
 
-<a href="{% url 'accounts:logout' %}">Logout</a>
+<a href="{% url 'teacher:profile' %}">Profile</a><br>
+<a href="{% url 'teacher:settings' %}">Settings</a><br>
+<a href="{% url 'teacher:courses' %}">Courses</a><br>
+<a href="{% url 'teacher:students' %}">Students</a><br>
+<a href="{% url 'classes:teacher_classes' %}">Classes</a>
+
 
 </body>
 </html>
