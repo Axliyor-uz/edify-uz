@@ -10,5 +10,6 @@ urlpatterns = [
     path('settings/', views.student_settings_view, name='settings'),
     path('profile/', views.student_profile, name='profile'),
     path('allclasses/', views.student_all_classes, name='all_classes'),
-    path('class/', views.student_join_class, name='join_class'),
+    path('join_class/<int:class_id>/', views.student_join_class, name='join_class'),
+    path('class/<int:class_id>/', views.student_class, name='class'),
 ]

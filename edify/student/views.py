@@ -47,14 +47,21 @@ def student_profile(request):
     
     return render(request, 'student/profile.html')
 
+from classes.models import Membership
+
 def student_my_classes(request):
     if not request.user.is_authenticated:
-            return redirect('accounts:login')
+        return redirect('accounts:login')
     if request.user.role != 'student':
-          return redirect('accounts:login')
-    
-    return render(request, 'student/my_classes.html')
+        return redirect('accounts:login')
 
+    student = request.user.student
+
+    enrollments = Membership.objects.filter(student=student).select_related('class_obj')
+
+    return render(request, 'student/my_classes.html', {
+        'enrollments': enrollments
+    })
 def student_all_classes(request):
     if not request.user.is_authenticated:
             return redirect('accounts:login')
@@ -75,4 +82,12 @@ def student_join_class(request, class_id):
         class_obj=class_obj
     )
 
-    return redirect('student_dashboard')
+    return redirect('student:class', class_id=class_id)
+
+def student_class(request, class_id):
+    class_obj = Class.objects.get(id=class_id)
+
+
+    return render(request, 'student/join_class.html', {
+        'classes': class_obj
+    })

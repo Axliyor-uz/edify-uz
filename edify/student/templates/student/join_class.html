@@ -1,12 +1,15 @@
-<h2>Join a Course</h2>
+<h2>Join to {{ class.name }}</h2>
 
 <form method="POST">
     {% csrf_token %}
-    <select name="course_id">
-        {% for course in courses %}
-            <option value="{{ course.id }}">{{ course.name }}</option>
+    <select name="class_id">
+        {% for class in my_classes %}
+            <option value="{{ class.id }}">{{ class.name }}</option>
         {% endfor %}
     </select>
 
-    <button type="submit">Join</button>
+    <button type="submit">Join</button><br><br><br>
+
+<a href="{% url 'student:dashboard' %}">Dashboard</a>
+
 </form>

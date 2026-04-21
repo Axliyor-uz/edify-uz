@@ -1,29 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Create Class</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Class — EduPlatform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0e1a; --bg-card: #111827; --bg-surface: #1a2235;
+  --accent: #6c63ff; --accent-soft: rgba(108,99,255,0.15); --accent2: #00d4aa;
+  --text-primary: #f0f4ff; --text-secondary: #8899aa; --text-muted: #4a5568;
+  --border: rgba(255,255,255,0.07); --border-strong: rgba(255,255,255,0.18);
+  --radius: 14px; --radius-sm: 8px;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; display: flex; }
+.sidebar { width: 256px; background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; }
+.sidebar-logo { padding: 28px 24px 20px; border-bottom: 1px solid var(--border); }
+.logo-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; }
+.logo-text span { color: var(--accent); }
+.sidebar-user { padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; color: #fff; flex-shrink: 0; }
+.user-name { font-size: 13px; font-weight: 500; }
+.user-role { font-size: 11px; color: var(--text-secondary); }
+.sidebar-nav { flex: 1; padding: 12px; overflow-y: auto; }
+.nav-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-muted); padding: 10px 12px 4px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius-sm); color: var(--text-secondary); text-decoration: none; font-size: 13.5px; transition: all 0.15s; margin-bottom: 1px; }
+.nav-item:hover, .nav-item.active { background: var(--accent-soft); color: var(--text-primary); }
+.nav-item.active { color: #a89fff; }
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; }
+.nav-item:hover .nav-dot, .nav-item.active .nav-dot { background: var(--accent); }
+.sidebar-footer { padding: 14px 12px; border-top: 1px solid var(--border); }
+.main { margin-left: 256px; flex: 1; padding: 60px; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; }
+.form-container { width: 100%; max-width: 560px; }
+.page-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 8px; }
+.page-title { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 6px; }
+.page-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 36px; }
+
+/* Form card */
+.form-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; }
+.form-group { margin-bottom: 22px; }
+.form-label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-secondary); margin-bottom: 8px; }
+.form-input, .form-textarea { width: 100%; background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 13px 16px; transition: border-color 0.2s, box-shadow 0.2s; outline: none; }
+.form-input:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,99,255,0.18); }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+.form-textarea { min-height: 130px; resize: vertical; line-height: 1.6; }
+.form-hint { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+.form-divider { height: 1px; background: var(--border); margin: 24px 0; }
+.form-actions { display: flex; gap: 12px; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 22px; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; border: none; transition: all 0.15s; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #7c73ff; transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-strong); }
+.btn-ghost:hover { color: var(--text-primary); }
+
+/* Tips */
+.tip-box { background: rgba(108,99,255,0.08); border: 1px solid rgba(108,99,255,0.2); border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 24px; }
+.tip-box p { font-size: 13px; color: #a89fff; line-height: 1.6; }
+.tip-box strong { font-weight: 500; }
+</style>
 </head>
 <body>
 
-<h2>Create Class</h2>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">Edu<span>Platform</span></div>
+  </div>
+  <div class="sidebar-user">
+    <div class="avatar">{{ user.username|slice:":2"|upper }}</div>
+    <div>
+      <div class="user-name">{{ user.username }}</div>
+      <div class="user-role">Instructor</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">Main</div>
+    <a href="{% url 'teacher:dashboard' %}" class="nav-item"><span class="nav-dot"></span> Dashboard</a>
+    <a href="{% url 'teacher:allclasses' %}" class="nav-item"><span class="nav-dot"></span> All Classes</a>
+    <a href="{% url 'teacher:courses' %}" class="nav-item"><span class="nav-dot"></span> Courses</a>
+    <a href="{% url 'teacher:students' %}" class="nav-item"><span class="nav-dot"></span> Students</a>
+    <div class="nav-label">Account</div>
+    <a href="{% url 'teacher:profile' %}" class="nav-item"><span class="nav-dot"></span> Profile</a>
+    <a href="{% url 'teacher:settings' %}" class="nav-item"><span class="nav-dot"></span> Settings</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="{% url 'accounts:logout' %}" class="nav-item" style="color:#e05555;"><span class="nav-dot" style="background:#e05555;"></span> Log out</a>
+  </div>
+</aside>
 
-<form method="POST">
-    {% csrf_token %}
+<main class="main">
+  <div class="form-container">
+    <div class="page-eyebrow">Teaching</div>
+    <h1 class="page-title">Create a Class</h1>
+    <p class="page-sub">Set up a new class for your students to discover and join.</p>
 
-    <label>Class Name:</label><br>
-    <input type="text" name="name" required><br><br>
+    <div class="form-card">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="form-label" for="name">Class Name</label>
+          <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Advanced Python Programming" required>
+          <div class="form-hint">Choose a clear, descriptive name that students will recognize.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="bio">Description</label>
+          <textarea id="bio" name="bio" class="form-textarea" placeholder="What will students learn in this class? What topics will you cover?"></textarea>
+          <div class="form-hint">A good description helps students decide if this class is right for them.</div>
+        </div>
+        <div class="form-divider"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Create Class →</button>
+          <a href="{% url 'teacher:allclasses' %}" class="btn btn-ghost">Cancel</a>
+        </div>
+      </form>
+    </div>
 
-    <label>Description:</label><br>
-    <textarea name="bio"></textarea><br><br>
+    <div class="tip-box">
+      <p><strong>Tip:</strong> After creating your class, students can find it in the Browse Classes section and request to join. You can manage enrollment from the class page.</p>
+    </div>
+  </div>
+</main>
 
-    <button type="submit">Create</button>
-</form>
-
-
-
-<br>
-<a href="{% url 'teacher:allclasses' %}">All classes</a><br>   <br><br>
-
-<a href="{% url 'teacher:dashboard' %}">Back to Dashboard</a>
 </body>
 </html>

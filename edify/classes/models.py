@@ -15,7 +15,7 @@ class Class(models.Model):
         related_name = 'classes'
     )
 
-    student = models.ManyToManyField(
+    students = models.ManyToManyField(
         Student,
         through='Membership',
         blank=True
@@ -25,7 +25,7 @@ class Class(models.Model):
         return self.name
     
     def get_student_count(self):
-        return self.student.count()
+        return self.students.count()
     
     class Meta:
         verbose_name_plural = "Classes"
