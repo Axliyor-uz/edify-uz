@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Class</title>
+</head>
+<body>
+
+<h2>Create Class</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Class Name:</label><br>
+    <input type="text" name="name" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="bio"></textarea><br><br>
+
+    <button type="submit">Create</button>
+</form>
+
+
+
+<br>
+<a href="{% url 'teacher:allclasses' %}">All classes</a><br>   <br><br>
+
+<a href="{% url 'teacher:dashboard' %}">Back to Dashboard</a>
+</body>
+</html>

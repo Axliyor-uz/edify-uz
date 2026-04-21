@@ -15,6 +15,7 @@
 {% for class in classes %}
     <div style="border:1px solid #ccc; padding:10px; margin:10px;">
         <h4>{{ class.name }}</h4>
+        <h5>{{ class.bio }}</h5>
 
         <p><strong>Students count:</strong> {{ class.students.count }}</p>
 
@@ -30,7 +31,8 @@
     <p>No classes created yet.</p>
 {% endfor %}
 
-<a href="{% url 'teacher:dashboard' %}">Dashboard</a>
+<a href="{% url 'teacher:create_class' %}">Create class</a><br><br><br>
+<a href="{% url 'teacher:dashboard' %}">Back to Dashboard</a>
 
 </body>
 </html>

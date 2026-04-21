@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ class.name }} - Class Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Literata:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .class-hero {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .class-hero::before {
+            content: '✓';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            font-size: 15rem;
+            opacity: 0.1;
+            font-weight: 700;
+        }
+
+        .class-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .enrolled-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .class-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .class-hero-meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        .hero-meta-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Description Card */
+        .description-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease-out 0.1s backwards;
+        }
+
+        .description-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .description-content {
+            font-family: 'Literata', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        /* Stats Card */
+        .stats-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease-out 0.2s backwards;
+        }
+
+        .stats-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+            background: var(--bg-main);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: var(--primary-light);
+            transform: translateX(4px);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-icon {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Teacher Info */
+        .teacher-info {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #e0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .teacher-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .teacher-details h3 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .teacher-details p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Action Section */
+        .action-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out 0.3s backwards;
+        }
+
+        .action-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .action-section p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-back {
+            background: var(--primary);
+            color: white;
+            margin-right: 1rem;
+        }
+
+        .btn-back:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-leave {
+            background: transparent;
+            color: var(--warning);
+            border: 2px solid var(--warning);
+        }
+
+        .btn-leave:hover {
+            background: var(--warning);
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .class-hero {
+                padding: 2rem;
+            }
+
+            .class-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'classes:student_classes' %}">My Classes</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current">{{ class.name }}</span>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="class-hero">
+            <div class="class-hero-content">
+                <div class="enrolled-badge">
+                    ✓ You're enrolled
+                </div>
+                <h1>{{ class.name }}</h1>
+                <div class="class-hero-meta">
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-icon">📅</span>
+                        <span>Joined {{ membership.date_joined|date:"F d, Y" }}</span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-icon">👥</span>
+                        <span>{{ student_count }} Student{{ student_count|pluralize }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <!-- Description -->
+            <div class="description-card">
+                <h2>📖 About This Class</h2>
+                <div class="description-content">
+                    {{ class.bio|default:"Welcome to this class! Your teacher will provide more details soon." }}
+                </div>
+            </div>
+
+            <!-- Stats & Info -->
+            <div class="stats-card">
+                <h2>📊 Class Info</h2>
+                
+                <div class="stat-item">
+                    <div class="stat-label">Total Students</div>
+                    <div class="stat-value">
+                        <span class="stat-icon">👥</span>{{ student_count }}
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">Enrollment Status</div>
+                    <div class="stat-value">
+                        <span class="stat-icon">✓</span>Active
+                    </div>
+                </div>
+
+                <div class="teacher-info">
+                    <div class="teacher-avatar">
+                        {{ class.teacher.user.username|slice:":1"|upper }}
+                    </div>
+                    <div class="teacher-details">
+                        <h3>{{ class.teacher.user.get_full_name|default:class.teacher.user.username }}</h3>
+                        <p>Instructor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Section -->
+        <div class="action-section">
+            <h2>Manage Your Enrollment</h2>
+            <p>You can leave this class anytime. You'll be able to rejoin later if you change your mind.</p>
+            
+            <div>
+                <a href="{% url 'classes:student_classes' %}" class="btn btn-back">
+                    ← Back to Classes
+                </a>
+                <a href="{% url 'classes:student_leave_class' class.id %}" class="btn btn-leave">
+                    Leave This Class
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

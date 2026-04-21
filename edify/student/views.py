@@ -2,13 +2,19 @@ from django.shortcuts import render, redirect
 # from .models import Course, Enrollment
 # Create your views here.
 
+from classes.models import Class
+from classes.models import Class, Membership
+from student.models import Student
+
 def student_dashboard(request):
     if not request.user.is_authenticated:
             return redirect('accounts:login')
     if request.user.role != 'student':
           return redirect('accounts:login')
     
-    return render(request, 'student/dashboard.html')
+    return render(request, 'student/dashboard.html', {
+        'memberships': Membership
+    })
 
 def student_courses(request):
     if not request.user.is_authenticated:
@@ -41,4 +47,32 @@ def student_profile(request):
     
     return render(request, 'student/profile.html')
 
+def student_my_classes(request):
+    if not request.user.is_authenticated:
+            return redirect('accounts:login')
+    if request.user.role != 'student':
+          return redirect('accounts:login')
+    
+    return render(request, 'student/my_classes.html')
 
+def student_all_classes(request):
+    if not request.user.is_authenticated:
+            return redirect('accounts:login')
+    if request.user.role != 'student':
+          return redirect('accounts:login')
+
+
+    classes = Class.objects.all()
+    return render(request, 'student/all_classes.html', {'all_classes': classes})
+
+def student_join_class(request, class_id):
+    student = request.user.student   # because of OneToOneField
+
+    class_obj = Class.objects.get(id=class_id)
+
+    Membership.objects.get_or_create(
+        student=student,
+        class_obj=class_obj
+    )
+
+    return redirect('student_dashboard')

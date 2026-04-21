@@ -1,30 +1,25 @@
 from django.db import models
 
-# Create your models here.
-# class Person(models.Model):
-#     name = models.CharField(max_length=128)
+
+# class Subscription(models.Model):
+#     user = models.CharField(max_length = 20)
+#     plan_choices = [
+#         ('basic', 'Basic'),
+#         ('pro', 'Pro'),
+#         ('enterprice', 'Enterprice'),
+#     ]
+#     start_date = models.DateTimeField(auto_now_add=True)
+#     is_active = models.BooleanField(default=False)
+#     plan_type = models.CharField(max_length = 20, choices = plan_choices, default='basic')
+
+
 
 #     def __str__(self):
-#         return self.name
+#         return self.user
+
+#     def can_access_premium_features(self):
+#         return self.is_active  and (self.plan_type('pro') or self.plan_type('enterprice'))
     
-# class Group(models.Model):
-#     name = models.CharField(max_length = 128)
-#     members = models.ManyToManyField(Person, through='Membership')
+#     def get_remaining_days(self):
 
-#     def __str__(self):
-#         return self.name
-    
-
-# class Membership(models.Model):
-#     person = models.ForeignKey(Person, on_delete=models.CASCADE)
-#     group = models.ForeignKey(Group, on_delete = models.CASCADE)
-#     date_joined = models.DateField()
-#     invite_reason = models.CharField(max_length = 64)
-
-
-#     class Mete(models.Model):
-#         constrains = [
-#             models.UniqueConstrains(
-#                 fields = ['person', 'group'], name ='unique person group'
-#             )
-#         ]
+#         return 30- self.start_date

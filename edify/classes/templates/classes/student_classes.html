@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Classes - Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Literata:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Alert Messages */
+        .alerts {
+            margin-bottom: 2rem;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .alert-success {
+            background: var(--success-light);
+            color: #065f46;
+            border-left: 4px solid var(--success);
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid var(--warning);
+        }
+
+        .alert::before {
+            content: '✓';
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .section-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Classes Grid */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            animation: fadeInUp 0.6s ease-out 0.2s backwards;
+        }
+
+        /* Class Card */
+        .class-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .class-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Enrolled Card Variant */
+        .class-card.enrolled {
+            border: 2px solid var(--success);
+            background: linear-gradient(to bottom, var(--success-light), var(--bg-card));
+        }
+
+        .class-card.enrolled::after {
+            content: '✓ Enrolled';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--success);
+            color: white;
+            padding: 0.375rem 0.875rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .class-card-header {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .class-card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-right: 5rem; /* Space for enrolled badge */
+        }
+
+        .class-card-bio {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-family: 'Literata', serif;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .class-card-meta {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-main);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .meta-icon {
+            font-size: 1.1rem;
+        }
+
+        .class-card-actions {
+            padding: 1.5rem 2rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-warning {
+            background: var(--bg-main);
+            color: var(--warning);
+            border: 2px solid var(--warning);
+        }
+
+        .btn-warning:hover {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-main);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 2px dashed var(--border);
+            animation: fadeIn 0.6s ease-out 0.3s backwards;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+
+        /* Divider */
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--border), transparent);
+            margin: 4rem 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .classes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <h1>My Classes</h1>
+            <p>Browse and join classes to start learning</p>
+        </div>
+
+        <!-- Alert Messages -->
+        {% if messages %}
+        <div class="alerts">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Enrolled Classes Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="icon">📚</span>
+                    My Enrolled Classes
+                </h2>
+                <span class="section-badge">{{ enrolled_count }} Active</span>
+            </div>
+
+            {% if enrolled_classes %}
+            <div class="classes-grid">
+                {% for class in enrolled_classes %}
+                <div class="class-card enrolled">
+                    <div class="class-card-header">
+                        <h3 class="class-card-title">{{ class.name }}</h3>
+                        <p class="class-card-bio">{{ class.bio|truncatewords:25|default:"No description available" }}</p>
+                    </div>
+                    
+                    <div class="class-card-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">👨‍🏫</span>
+                            <span>{{ class.teacher.user.get_full_name|default:class.teacher.user.username }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">👥</span>
+                            <span>{{ class.get_student_count }} student{{ class.get_student_count|pluralize }}</span>
+                        </div>
+                    </div>
+
+                    <div class="class-card-actions">
+                        <a href="{% url 'classes:student_class_detail' class.id %}" class="btn btn-primary">
+                            📖 View Details
+                        </a>
+                        <a href="{% url 'classes:student_leave_class' class.id %}" class="btn btn-warning">
+                            ← Leave
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📚</div>
+                <h3>Not enrolled in any classes yet</h3>
+                <p>Browse available classes below to start your learning journey!</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+        <!-- Available Classes Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="icon">🌟</span>
+                    Available Classes
+                </h2>
+            </div>
+
+            {% if available_classes %}
+            <div class="classes-grid">
+                {% for class in available_classes %}
+                <div class="class-card">
+                    <div class="class-card-header">
+                        <h3 class="class-card-title">{{ class.name }}</h3>
+                        <p class="class-card-bio">{{ class.bio|truncatewords:25|default:"Discover what this class has to offer!" }}</p>
+                    </div>
+                    
+                    <div class="class-card-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">👨‍🏫</span>
+                            <span>{{ class.teacher.user.get_full_name|default:class.teacher.user.username }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">👥</span>
+                            <span>{{ class.get_student_count }} student{{ class.get_student_count|pluralize }}</span>
+                        </div>
+                    </div>
+
+                    <div class="class-card-actions">
+                        <a href="{% url 'classes:student_join_class' class.id %}" class="btn btn-success">
+                            + Join Class
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">🎓</div>
+                <h3>No available classes</h3>
+                <p>Check back later for new classes to join!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

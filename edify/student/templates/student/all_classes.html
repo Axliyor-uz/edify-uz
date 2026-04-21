@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Classes</title>
+</head>
+<body>
+
+<h2>All Classes</h2>
+
+<a href="{% url 'student:my_classes' %}">My Classes</a>
+
+<hr>
+
+{% for c in all_classes %}
+    <div>
+        <h3>{{ c.name }}</h3>
+        <p>{{ c.bio }}</p>
+        <p>Teacher: {{ c.teacher.user.username }}</p>
+
+        {% if c.id in joined_classes %}
+            <button disabled>Joined</button>
+        {% else %}
+            <form method="POST" action="">
+                {% csrf_token %}
+                <button type="submit">Join</button>
+            </form>
+        {% endif %}
+    </div>
+    <hr>
+{% empty %}
+    <p>No classes available.</p>
+{% endfor %}
+
+</body>
+</html>
