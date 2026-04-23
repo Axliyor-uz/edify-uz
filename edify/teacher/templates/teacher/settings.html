@@ -1,16 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Teacher's  Settings</title>
-</head>
-<body>
+{% extends 'teacher/base.html' %}
 
-<h2>Teacher's  Settings</h2>
-<p>Welcome {{ user.username }}</p>
+{% block content %}
+<h2>⚙️ Account Settings</h2>
 
-<a href="{% url 'teacher:dashboard' %}">Dashboard</a>
+<form method="POST" action="{% url 'teacher:settings' %}">
+    {% csrf_token %}
 
-<a href="{% url 'accounts:logout' %}">Logout</a>
+    <input type="text" name="username" value="{{ user.username }}"><br>
+    <input type="email" name="email" value="{{ user.email }}"><br>
+    <input type="text" name="uname" value="{{ user.teacher.uname }}"><br>
+    <textarea name="bio">{{ user.teacher.bio }}</textarea><br>
 
-</body>
-</html>
+    <button type="submit">Save</button>
+</form>
+
+<hr>
+
+<form action="{% url 'teacher:dashboard' %}">
+    <button>Dashboard</button>
+</form>
+
+
+{% endblock %}

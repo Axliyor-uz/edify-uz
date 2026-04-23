@@ -12,5 +12,6 @@ urlpatterns = [
     path('classes/', views.teacher_create_class, name='create_class'),
     path('allclasses/', views.teacher_classes, name='allclasses'),
     # path('classes/', views.teacher_classes, name='classes'),
-    
+    path('settings/', views.teacher_settings, name='settings'),
+    # path('delete/', views.delete_account, name='delete_account'),
 ]
