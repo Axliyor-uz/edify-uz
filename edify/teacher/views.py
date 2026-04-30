@@ -102,6 +102,13 @@ def teacher_settings(request):
 
     user = request.user
     teacher = user.teacher
+
+    teacher = getattr(user, 'teacher', None)
+
+    if teacher is None:
+        return redirect('teacher:dashboard')  # or create one
+
+
     if request.method == 'POST':
         user.username = request.POST.get('username')
         user.email = request.POST.get('email')

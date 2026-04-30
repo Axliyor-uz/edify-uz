@@ -103,30 +103,16 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   </div>
   <nav class="sidebar-nav">
     <div class="nav-label">Main</div>
-    <a href="{% url 'teacher:dashboard' %}" class="nav-item active">
-      <span class="nav-dot"></span> Dashboard
-    </a>
-    <a href="{% url 'teacher:allclasses' %}" class="nav-item">
-      <span class="nav-dot"></span> All Classes
-    </a>
-    <a href="{% url 'teacher:courses' %}" class="nav-item">
-      <span class="nav-dot"></span> Courses
-    </a>
-    <a href="{% url 'teacher:students' %}" class="nav-item">
-      <span class="nav-dot"></span> Students
-    </a>
+    <a href="{% url 'teacher:dashboard' %}" class="nav-item active"><span class="nav-dot"></span> Dashboard</a>
+    <a href="{% url 'teacher:allclasses' %}" class="nav-item"><span class="nav-dot"></span> All Classes</a>
+    <a href="{% url 'teacher:courses' %}" class="nav-item"><span class="nav-dot"></span> Courses</a>
+    <a href="{% url 'teacher:students' %}" class="nav-item"><span class="nav-dot"></span> Students</a>
     <div class="nav-label">Account</div>
-    <a href="{% url 'teacher:profile' %}" class="nav-item">
-      <span class="nav-dot"></span> Profile
-    </a>
-    <a href="{% url 'teacher:settings' %}" class="nav-item">
-      <span class="nav-dot"></span> Settings
-    </a>
+    <a href="{% url 'teacher:profile' %}" class="nav-item"><span class="nav-dot"></span> Profile</a>
+    <a href="{% url 'teacher:settings' %}" class="nav-item"><span class="nav-dot"></span> Settings</a>
   </nav>
   <div class="sidebar-footer">
-    <a href="{% url 'accounts:logout' %}" class="nav-item" style="color: #e05555;">
-      <span class="nav-dot" style="background:#e05555;"></span> Log out
-    </a>
+    <a href="{% url 'accounts:logout' %}" class="nav-item" style="color:#e05555;"><span class="nav-dot" style="background:#e05555;"></span> Log out</a>
   </div>
 </aside>
 

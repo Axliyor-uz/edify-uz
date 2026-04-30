@@ -1,0 +1,14 @@
+<h1>{{ class_obj.name }}</h1>
+<p>{{ class_obj.bio }}</p>
+
+<h3>Teacher:</h3>
+<p>{{ teacher.user.username }}</p>
+
+<h3>Students ({{ class_obj.get_student_count }}):</h3>
+<ul>
+    {% for student in students %}
+        <li>{{ student.user.username }}</li>
+    {% empty %}
+        <li>No students yet</li>
+    {% endfor %}
+</ul>
