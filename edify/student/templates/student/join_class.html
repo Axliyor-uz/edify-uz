@@ -1,15 +1,22 @@
-<h2>Join to {{ class.name }}</h2>
+{% extends 'student/base.html' %}
 
-<form method="POST">
-    {% csrf_token %}
-    <select name="class_id">
-        {% for class in my_classes %}
-            <option value="{{ class.id }}">{{ class.name }}</option>
-        {% endfor %}
-    </select>
+{% block title %}{{ class_obj.name }} — EduPlatform{% endblock %}
 
-    <button type="submit">Join</button><br><br><br>
+{% block content %}
+<div class="page-eyebrow">Class</div>
+<h1 class="page-title">{{ class_obj.name }}</h1>
+<p class="page-sub">Teacher: {{ class_obj.teacher.user.username }}</p>
 
-<a href="{% url 'student:dashboard' %}">Dashboard</a>
-
-</form>
+<div class="card" style="margin-top:24px; max-width: 880px;">
+  <p style="line-height:1.7;color:#c5d0e0;margin-bottom:20px;">{{ class_obj.bio|default:"No description available." }}</p>
+  {% if is_joined %}
+    <span style="display:inline-block;color:#66e8d0;">Already joined</span>
+  {% else %}
+    <form method="post" action="{% url 'student:join_class' class_obj.id %}">
+      {% csrf_token %}
+      <button class="btn btn-primary" type="submit">Join class</button>
+    </form>
+  {% endif %}
+  <p style="margin-top:20px;"><a href="{% url 'student:all_classes' %}" style="color: var(--accent);">Back to classes</a></p>
+</div>
+{% endblock %}

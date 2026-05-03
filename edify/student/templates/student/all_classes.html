@@ -1,135 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Browse Classes — EduPlatform</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #080d18; --bg-card: #0f1824; --bg-surface: #172030;
-  --accent: #00c9a7; --accent-soft: rgba(0,201,167,0.12); --accent2: #7b6ff0;
-  --text-primary: #eef2ff; --text-secondary: #7a90a8; --text-muted: #3e5060;
-  --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.12);
-  --radius: 14px; --radius-sm: 8px;
-}
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; display: flex; }
-.sidebar { width: 256px; background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; }
-.sidebar-logo { padding: 28px 24px 20px; border-bottom: 1px solid var(--border); }
-.logo-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; }
-.logo-text span { color: var(--accent); }
-.sidebar-user { padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
-.avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; color: #fff; flex-shrink: 0; }
-.user-name { font-size: 13px; font-weight: 500; }
-.user-role { font-size: 11px; color: var(--text-secondary); }
-.sidebar-nav { flex: 1; padding: 12px; overflow-y: auto; }
-.nav-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-muted); padding: 10px 12px 4px; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius-sm); color: var(--text-secondary); text-decoration: none; font-size: 13.5px; transition: all 0.15s; margin-bottom: 1px; }
-.nav-item:hover, .nav-item.active { background: var(--accent-soft); color: var(--text-primary); }
-.nav-item.active { color: #66e8d0; }
-.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; }
-.nav-item:hover .nav-dot, .nav-item.active .nav-dot { background: var(--accent); }
-.sidebar-footer { padding: 14px 12px; border-top: 1px solid var(--border); }
-.main { margin-left: 256px; flex: 1; padding: 40px; min-height: 100vh; }
-.page-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 6px; }
-.page-title { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 600; }
-.page-sub { font-size: 14px; color: var(--text-secondary); margin-top: 6px; }
-.header-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; }
-.my-classes-link { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--radius-sm); background: var(--accent-soft); border: 1px solid rgba(0,201,167,0.2); color: #66e8d0; font-size: 13px; font-weight: 500; text-decoration: none; transition: all 0.15s; }
-.my-classes-link:hover { background: rgba(0,201,167,0.18); }
+{% extends 'student/base.html' %}
 
-.classes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
-.class-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.18s; display: flex; flex-direction: column; }
-.class-card:hover { border-color: rgba(0,201,167,0.4); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,201,167,0.08); }
-.class-accent { height: 5px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
-.class-body { padding: 20px; flex: 1; }
-.class-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 500; margin-bottom: 5px; }
-.class-teacher { font-size: 12px; color: var(--accent); margin-bottom: 10px; font-weight: 500; }
-.class-bio { font-size: 13px; color: var(--text-secondary); line-height: 1.6; min-height: 40px; }
-.class-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-
-.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; border: none; transition: all 0.15s; }
-.btn-primary { background: var(--accent); color: #0a1a16; }
-.btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
-.btn-joined { background: var(--bg-surface); color: var(--accent); border: 1px solid rgba(0,201,167,0.25); cursor: default; }
-.btn-joined::before { content: '✓ '; }
-
-.pill { display: inline-flex; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 100px; padding: 3px 9px; font-size: 11px; color: var(--text-secondary); }
-
-.empty-state { text-align: center; padding: 80px 20px; color: var(--text-secondary); }
-.empty-state h3 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 8px; color: var(--text-primary); }
-</style>
-</head>
-<body>
-
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-text">Edu<span>Platform</span></div>
+{% block title %}Browse Classes — EduPlatform{% endblock %}
+{% block content %}
+<div class="header-row">
+  <div>
+    <div class="page-eyebrow">Discover</div>
+    <h1 class="page-title">Browse All Classes</h1>
+    <p class="page-sub">Find classes that match your interests and join instantly.</p>
   </div>
-  <div class="sidebar-user">
-    <div class="avatar">{{ user.username|slice:":2"|upper }}</div>
-    <div>
-      <div class="user-name">{{ user.username }}</div>
-      <div class="user-role">Student</div>
+  <a href="{% url 'student:my_classes' %}" class="my-classes-link">My Classes →</a>
+</div>
+
+{% if all_classes %}
+<div class="classes-grid">
+  {% for c in all_classes %}
+  <div class="class-card">
+    <div class="class-accent"></div>
+    <div class="class-body">
+      <div class="class-name">{{ c.name }}</div>
+      <div class="class-teacher">by {{ c.teacher.user.username }}</div>
+      <div class="class-bio">{{ c.bio|default:"No description available." }}</div>
+    </div>
+    <div class="class-footer">
+      <span class="pill">{{ c.students.count }} enrolled</span>
+      {% if c.id in joined_classes %}
+        <span class="btn btn-joined">Joined</span>
+      {% else %}
+        <form method="POST" action="{% url 'student:join_class' c.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Join Class</button>
+        </form>
+      {% endif %}
     </div>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-label">Learning</div>
-    <a href="{% url 'student:dashboard' %}" class="nav-item"><span class="nav-dot"></span> Dashboard</a>
-    <a href="{% url 'student:my_classes' %}" class="nav-item"><span class="nav-dot"></span> My Classes</a>
-    <a href="{% url 'student:all_classes' %}" class="nav-item active"><span class="nav-dot"></span> Browse Classes</a>
-    <a href="{% url 'student:teachers' %}" class="nav-item"><span class="nav-dot"></span> Teachers</a>
-    <div class="nav-label">Account</div>
-    <a href="{% url 'student:profile' %}" class="nav-item"><span class="nav-dot"></span> Profile</a>
-    <a href="{% url 'student:settings' %}" class="nav-item"><span class="nav-dot"></span> Settings</a>
-  </nav>
-  <div class="sidebar-footer">
-    <a href="{% url 'accounts:logout' %}" class="nav-item" style="color:#e05555;"><span class="nav-dot" style="background:#e05555;"></span> Log out</a>
-  </div>
-</aside>
-
-<main class="main">
-  <div class="header-row">
-    <div>
-      <div class="page-eyebrow">Discover</div>
-      <h1 class="page-title">Browse All Classes</h1>
-      <p class="page-sub">Find classes that match your interests and join instantly.</p>
-    </div>
-    <a href="{% url 'student:my_classes' %}" class="my-classes-link">My Classes →</a>
-  </div>
-
-  {% if all_classes %}
-  <div class="classes-grid">
-    {% for c in all_classes %}
-    <div class="class-card">
-      <div class="class-accent"></div>
-      <div class="class-body">
-        <div class="class-name">{{ c.name }}</div>
-        <div class="class-teacher">by {{ c.teacher.user.username }}</div>
-        <div class="class-bio">{{ c.bio|default:"No description available." }}</div>
-      </div>
-      <div class="class-footer">
-        <span class="pill">{{ c.students.count }} enrolled</span>
-        {% if c.id in joined_classes %}
-          <span class="btn btn-joined">Joined</span>
-        {% else %}
-          <form method="POST" action="{% url 'student:join_class' c.id %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Join Class</button>
-          </form>
-        {% endif %}
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <div class="empty-state">
-    <h3>No Classes Available</h3>
-    <p>No classes have been created yet. Check back soon.</p>
-  </div>
-  {% endif %}
-</main>
-
-</body>
-</html>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <h3>No Classes Available</h3>
+  <p>No classes have been created yet. Check back soon.</p>
+</div>
+{% endif %}
+{% endblock %}
