@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Classes — EduPlatform</title>
+<title>Class Students — EduPlatform</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
 /* KEEP YOUR SAME VARIABLES */
 :root {
@@ -317,9 +319,9 @@ body {
   <nav class="sidebar-nav">
     <div class="nav-label">Main</div>
     <a href="{% url 'teacher:dashboard' %}" class="nav-item"><span class="nav-dot"></span> Dashboard</a>
-    <a href="{% url 'teacher:allclasses' %}" class="nav-item "><span class="nav-dot"></span> All Classes</a>
-    <a href="{% url 'teacher:assignments' %}" class="nav-item "><span class="nav-dot"></span> Assignments</a>
-    <a href="{% url 'teacher:students' %}" class="nav-item active"><span class="nav-dot"></span> Students</a>
+    <a href="{% url 'teacher:allclasses' %}" class="nav-item active"><span class="nav-dot"></span> All Classes</a>
+    <a href="{% url 'teacher:assignments' %}" class="nav-item"><span class="nav-dot"></span> Assignments</a>
+    <a href="{% url 'teacher:students' %}" class="nav-item"><span class="nav-dot"></span> Students</a>
     <div class="nav-label">Account</div>
     <a href="{% url 'teacher:profile' %}" class="nav-item"><span class="nav-dot"></span> Profile</a>
     <a href="{% url 'teacher:settings' %}" class="nav-item"><span class="nav-dot"></span> Settings</a>
@@ -329,46 +331,41 @@ body {
   </div>
 </aside>
 
-
 <main class="main">
 
-  <h1 class="page-title">👨‍🎓 Your Students</h1>
+  <h1 class="page-title">{{ class.name }}</h1>
+  <p class="page-sub">Manage enrolled students</p>
 
-  {% for student, classes in student_classes.items %}
-  
-    <div class="card" style="margin-bottom:20px;">
+  <div class="card">
 
-      <div class="student-row">
+    {% for student in class.students.all %}
+    <div class="student-row">
 
-        <div class="student-info">
-          <div class="avatar">
-            {{ student.user.username|slice:":2"|upper }}
-          </div>
-
-          <div>
-            <div class="student-name">{{ student.user.username }}</div>
-
-            <!-- 🔥 Show all classes -->
-            <div style="font-size:13px; color:#d6d6d6;">
-              Classes: <br>
-              {% for cls in classes %}
-                <span style="padding-left:50px; font-size:13px; color:#ffffff;"">
-                  {{ cls.name }}{% if not forloop.last %} {% endif %}
-                </span><br>
-              {% endfor %}
-            </div>
-
-          </div>
+      <div class="student-info">
+        <div class="avatar">
+          {{ student.user.username|slice:":2"|upper }}
         </div>
-
+        <div class="student-name">
+          {{ student.user.username }}
+        </div>
       </div>
 
-    </div>
+      <!-- DELETE BUTTON -->
+      <form method="POST" action="{% url 'classes:remove_student' class.id student.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-delete">
+          Remove
+        </button>
+      </form>
 
-  {% empty %}
-    <div class="empty">No students found</div>
-  {% endfor %}
+    </div>
+    {% empty %}
+      <div class="empty">No students enrolled</div>
+    {% endfor %}
+
+  </div>
 
 </main>
+
 </body>
 </html>

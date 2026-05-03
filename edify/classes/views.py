@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from teacher.models import Teacher
+from student.models import Student
 from .models import Class
 from .forms import ClassForm
+from django.db.models import Count
+
 
 def teacher_classes(request):
     if not request.user.is_authenticated:
@@ -34,18 +37,29 @@ def teacher_classes(request):
 
 
 
-
 def class_detail(request, pk):
-    class_obj = get_object_or_404(Class, pk=pk)
+    class_obj = Class.objects.prefetch_related('students__user').get(pk=pk)
 
-    students = class_obj.students.all()
-    teacher = class_obj.teacher
+    classes = Class.objects.filter(teacher=request.user.teacher).annotate(
+        student_count=Count('students')
+    )
+
+    total_students = sum(c.student_count for c in classes)
 
     context = {
-        'class_obj': class_obj,
-        'students': students,
-        'teacher': teacher,
+        'class': class_obj,          # 👉 use this in template
+        'total_students': total_students
     }
 
-    return render(request, 'classes/class_detail.html', context)
+    return render(request, 'classes/teacher_class_detail.html', context)
+def remove_student(request, class_id, student_id):
+    cls = get_object_or_404(Class, id=class_id)
+    student = get_object_or_404(Student, id=student_id)
 
+    from .models import Membership
+    Membership.objects.filter(
+        student=student,
+        class_obj=cls
+    ).delete()
+
+    return redirect('classes:class_detail', pk=class_id)

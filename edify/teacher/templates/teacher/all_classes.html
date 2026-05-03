@@ -65,6 +65,24 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .empty-state { text-align: center; padding: 80px 20px; color: var(--text-secondary); }
 .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; margin-bottom: 10px; color: var(--text-primary); }
 .empty-state p { font-size: 14px; margin-bottom: 24px; }
+
+
+
+.class-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.class-card {
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+.class-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
 </style>
 </head>
 <body>
@@ -84,7 +102,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <div class="nav-label">Main</div>
     <a href="{% url 'teacher:dashboard' %}" class="nav-item"><span class="nav-dot"></span> Dashboard</a>
     <a href="{% url 'teacher:allclasses' %}" class="nav-item active"><span class="nav-dot"></span> All Classes</a>
-    <a href="{% url 'teacher:courses' %}" class="nav-item"><span class="nav-dot"></span> Courses</a>
+    <a href="{% url 'teacher:assignments' %}" class="nav-item"><span class="nav-dot"></span> Assignments</a>
     <a href="{% url 'teacher:students' %}" class="nav-item"><span class="nav-dot"></span> Students</a>
     <div class="nav-label">Account</div>
     <a href="{% url 'teacher:profile' %}" class="nav-item"><span class="nav-dot"></span> Profile</a>
@@ -123,28 +141,22 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   {% if classes %}
   <div class="classes-grid">
     {% for class in classes %}
-    <div class="class-card">
-      <div class="class-card-accent"></div>
-      <div class="class-card-body">
-        <div class="class-name">{{ class.name }}</div>
-        <div class="class-bio">{{ class.bio|default:"No description provided." }}</div>
-        <div class="class-meta">
-          <span class="pill accent">{{ class.students.count }} student{% if class.students.count != 1 %}s{% endif %}</span>
-        </div>
-        <div class="divider"></div>
-        <div class="student-list-header">Enrolled Students</div>
-        <ul class="student-list">
-          {% for student in class.students.all %}
-          <li class="student-row">
-            <div class="s-avatar">{{ student.user.username|slice:":2"|upper }}</div>
-            <span class="s-name">{{ student.user.username }}</span>
-          </li>
-          {% empty %}
-          <li class="empty">No students enrolled yet</li>
-          {% endfor %}
-        </ul>
+  <a href="{% url 'classes:class_detail' class.id %}" class="class-link">
+  <div class="class-card">
+    <div class="class-card-accent"></div>
+    <div class="class-card-body">
+      <div class="class-name">{{ class.name }}</div>
+      <div class="class-bio">{{ class.bio|default:"No description provided." }}</div>
+      <div class="class-meta">
+        <span class="pill accent">
+          {{ class.students.count }} student{% if class.students.count != 1 %}s{% endif %}
+        </span>
       </div>
+      <div class="divider"></div>
+      <div class="student-list-header">Enrolled Students</div>
     </div>
+  </div>
+</a>
     {% endfor %}
   </div>
   {% else %}

@@ -105,7 +105,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <div class="nav-label">Main</div>
     <a href="{% url 'teacher:dashboard' %}" class="nav-item active"><span class="nav-dot"></span> Dashboard</a>
     <a href="{% url 'teacher:allclasses' %}" class="nav-item"><span class="nav-dot"></span> All Classes</a>
-    <a href="{% url 'teacher:courses' %}" class="nav-item"><span class="nav-dot"></span> Courses</a>
+    <a href="{% url 'teacher:assignments' %}" class="nav-item"><span class="nav-dot"></span> Assignments</a>
     <a href="{% url 'teacher:students' %}" class="nav-item"><span class="nav-dot"></span> Students</a>
     <div class="nav-label">Account</div>
     <a href="{% url 'teacher:profile' %}" class="nav-item"><span class="nav-dot"></span> Profile</a>
@@ -129,12 +129,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   <div class="stats">
     <div class="stat">
       <div class="stat-label">Total Classes</div>
-      <div class="stat-value">—</div>
+      <div class="stat-value">{{total_classes}}</div>
       <div class="stat-change">Active this semester</div>
     </div>
     <div class="stat">
       <div class="stat-label">Total Students</div>
-      <div class="stat-value">—</div>
+      <div class="stat-value">{{total_students}}</div>
       <div class="stat-change">Across all classes</div>
     </div>
     <div class="stat">
@@ -144,7 +144,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     </div>
     <div class="stat">
       <div class="stat-label">Engagement</div>
-      <div class="stat-value">—</div>
+      <div class="stat-value">{{last_joined}}</div>
       <div class="stat-change">This week</div>
     </div>
   </div>

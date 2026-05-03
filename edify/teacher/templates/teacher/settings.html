@@ -65,6 +65,112 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .empty-state { text-align: center; padding: 80px 20px; color: var(--text-secondary); }
 .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; margin-bottom: 10px; color: var(--text-primary); }
 .empty-state p { font-size: 14px; margin-bottom: 24px; }
+
+:root {
+  --bg: #0a0e1a;
+  --bg-card: #111827;
+  --bg-surface: #1a2235;
+  --accent: #6c63ff;
+  --accent2: #00d4aa;
+  --text-primary: #f0f4ff;
+  --text-secondary: #8899aa;
+  --border: rgba(255,255,255,0.07);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+body {
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  display: flex;
+}
+
+/* MAIN */
+.main {
+  margin-left: 256px;
+  padding: 40px;
+  width: 100%;
+}
+
+/* HEADER */
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.page-sub {
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+/* CARD */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 30px;
+  max-width: 600px;
+}
+
+/* FORM */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* BUTTONS */
+.btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #7c73ff;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
 </style>
 </head>
 <body>
@@ -84,7 +190,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <div class="nav-label">Main</div>
     <a href="{% url 'teacher:dashboard' %}" class="nav-item"><span class="nav-dot"></span> Dashboard</a>
     <a href="{% url 'teacher:allclasses' %}" class="nav-item"><span class="nav-dot"></span> All Classes</a>
-    <a href="{% url 'teacher:courses' %}" class="nav-item"><span class="nav-dot"></span> Courses</a>
+    <a href="{% url 'teacher:assignments' %}" class="nav-item"><span class="nav-dot"></span> Assignments</a>
     <a href="{% url 'teacher:students' %}" class="nav-item"><span class="nav-dot"></span> Students</a>
     <div class="nav-label">Account</div>
     <a href="{% url 'teacher:profile' %}" class="nav-item"><span class="nav-dot"></span> Profile</a>
@@ -96,34 +202,48 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 </aside>
 
 
+</head>
+
+<body>
 
 <main class="main">
 
-{% block content %}
-<h2>⚙️ Account Settings</h2>
+<h1 class="page-title">Account Settings</h1>
+<p class="page-sub">Update your profile information</p>
+
+<div class="card">
 
 <form method="POST" action="{% url 'teacher:settings' %}">
     {% csrf_token %}
 
-    <input type="text" name="username" value="{{ user.username }}"><br>
-    <input type="email" name="email" value="{{ user.email }}"><br>
-    <input type="text" name="uname" value="{{ user.teacher.uname }}"><br>
-    <textarea name="bio">{{ user.teacher.bio }}</textarea><br>
+<div class="form-group">
+    <label class="form-label">Username</label>
+    <input class="form-input" type="text" name="username" value="{{ user.username }}">
+</div>
 
-    <button type="submit">Save</button>
+<div class="form-group">
+    <label class="form-label">Email</label>
+    <input class="form-input" type="email" name="email" value="{{ user.email }}">
+</div>
+
+<div class="form-group">
+    <label class="form-label">Display Name</label>
+    <input class="form-input" type="text" name="uname" value="{{ user.teacher.uname }}">
+</div>
+
+<div class="form-group">
+    <label class="form-label">Bio</label>
+    <textarea class="form-input" name="bio" rows="4">{{ user.teacher.bio }}</textarea>
+</div>
+
+<div class="btn-row">
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'teacher:dashboard' %}" class="btn btn-secondary">Cancel</a>
+</div>
+
 </form>
 
-<hr>
-
-<form action="{% url 'teacher:dashboard' %}">
-    <button>Dashboard</button>
-</form>
-
-
-{% endblock %}
-
-
-
+</div>
 
 </main>
 
