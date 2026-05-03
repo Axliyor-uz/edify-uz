@@ -48,3 +48,13 @@ class Membership(models.Model):
 
     def __str__(self):
         return f"{self.student.user.username} in {self.class_obj.name}"
+
+class Assignment(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+
+    teacher = models.ForeignKey('teacher.Teacher', on_delete=models.CASCADE)
+
+    classes = models.ManyToManyField('classes.Class')
+
+    created_at = models.DateTimeField(auto_now_add=True)

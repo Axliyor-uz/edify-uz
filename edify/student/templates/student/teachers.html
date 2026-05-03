@@ -63,6 +63,55 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .btn-primary { background: var(--accent); color: #0a1a16; }
 .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
 .empty { text-align: center; padding: 32px; color: var(--text-secondary); font-size: 13px; }
+/* TEACHERS GRID */
+.teachers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+/* TEACHER CARD */
+.teacher-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.15s;
+}
+
+.teacher-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* AVATAR */
+.teacher-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* INFO */
+.teacher-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.teacher-email {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
 </style>
 </head>
 <body>
@@ -92,13 +141,55 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <a href="{% url 'accounts:logout' %}" class="nav-item" style="color:#e05555;"><span class="nav-dot" style="background:#e05555;"></span> Log out</a>
   </div>
 </aside>
+<main class="main">
 
-<body>
+  <h1 class="page-title">👨‍🏫 My Teachers</h1>
+  <p class="page-sub">Teachers from your enrolled classes</p>
 
-<h2>Student Teachers</h2>
-<p>Welcome {{ user.username }}</p>
+  {% if teacher_classes %}
 
-<a href="{% url 'student:dashboard' %}">Dashboard</a>
+  <div class="teachers-grid">
 
+    {% for teacher, classes in teacher_classes.items %}
+
+      <div class="teacher-card">
+
+        <!-- Avatar -->
+        <div class="teacher-avatar">
+          {{ teacher.user.username|slice:":2"|upper }}
+        </div>
+
+        <!-- Info -->
+        <div style="flex:1;">
+
+          <div class="teacher-name">
+            {{ teacher.user.username }}
+          </div>
+
+          <div class="teacher-email">
+            {{ teacher.user.email|default:"No email" }}
+          </div>
+
+          <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;">
+            {% for cls in classes %}
+              <span class="pill accent">{{ cls.name }}</span>
+            {% endfor %}
+          </div>
+
+        </div>
+
+      </div>
+
+    {% endfor %}
+
+  </div>
+
+  {% else %}
+    <div class="empty">
+      No teachers found
+    </div>
+  {% endif %}
+
+</main>
 </body>
 </html>

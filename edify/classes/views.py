@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from teacher.models import Teacher
 from student.models import Student
+from .models import Assignment
 from .models import Class
 from .forms import ClassForm
 from django.db.models import Count
@@ -37,6 +38,9 @@ def teacher_classes(request):
 
 
 
+
+
+
 def class_detail(request, pk):
     class_obj = Class.objects.prefetch_related('students__user').get(pk=pk)
 
@@ -52,7 +56,12 @@ def class_detail(request, pk):
     }
 
     return render(request, 'classes/teacher_class_detail.html', context)
+
+
+
+
 def remove_student(request, class_id, student_id):
+
     cls = get_object_or_404(Class, id=class_id)
     student = get_object_or_404(Student, id=student_id)
 
@@ -63,3 +72,50 @@ def remove_student(request, class_id, student_id):
     ).delete()
 
     return redirect('classes:class_detail', pk=class_id)
+
+
+
+
+
+
+def create_assignment(request):
+    teacher = request.user.teacher
+
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        class_ids = request.POST.getlist("classes")
+
+        assignment = Assignment.objects.create(
+            title=title,
+            description=description,
+            teacher=teacher
+        )
+
+        assignment.classes.set(Class.objects.filter(id__in=class_ids))
+
+        return redirect("teacher:assignments")
+
+    classes = Class.objects.filter(teacher=teacher)
+
+    return render(request, "teacher/create_assignment.html", {
+        "classes": classes
+    })
+
+
+def teacher_assignments(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    if request.user.role != 'teacher':
+        return redirect('accounts:login')
+
+    teacher = request.user.teacher
+
+    assignments = Assignment.objects.filter(
+        classes__teacher=teacher   # ✅ FIX HERE
+    ).distinct()
+
+    return render(request, 'teacher/assignments.html', {
+        'assignments': assignments
+    })

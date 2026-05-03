@@ -1,5 +1,4 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Teacher
 from student.models import Student
 from classes.models import Class
 from classes.models import Membership
@@ -25,12 +24,6 @@ def teacher_dashboard(request):
     total_classes = Class.objects.filter(
         teacher=request.user.teacher
     ).count()
-
-
-
-
-    
-
 
     today = timezone.now().date()
 
@@ -206,3 +199,6 @@ def edit_class(request, class_id):
     return render(request, "teacher/edit_class.html", {"class": cls})
 
     
+
+
+
