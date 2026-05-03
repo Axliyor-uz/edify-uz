@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'accounts',
     'student',
     'teacher',
-    'rest_framework',
-    
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
