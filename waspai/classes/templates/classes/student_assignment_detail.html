@@ -1,0 +1,231 @@
+{% extends 'student/base.html' %}
+{% block title %}{{ assignment.title }}{% endblock %}
+{% block content %}
+
+<style>
+  .assignment-page {
+    display: grid;
+    gap: 20px;
+  }
+
+  .assignment-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+
+  .assignment-desc {
+    max-width: 760px;
+    line-height: 1.65;
+    margin-bottom: 0;
+  }
+
+  .section-head {
+    margin: 0 0 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+  }
+
+  .file-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .file-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+  }
+
+  .file-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .file-link {
+    color: var(--accent);
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .meta-muted {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .submission-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .submission-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .pill-grade {
+    background: var(--accent-soft);
+    color: #a89fff;
+    border-color: transparent;
+  }
+
+  .resubmit-box {
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin-top: 14px;
+  }
+
+  .upload-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .upload-label span {
+    color: var(--text-muted);
+    font-size: 12px;
+    max-width: 210px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 760px) {
+    .file-row,
+    .upload-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .submission-actions {
+      width: 100%;
+    }
+
+    .submission-actions .btn,
+    .upload-form .btn {
+      justify-content: center;
+    }
+  }
+</style>
+
+<div class="assignment-page">
+  <section class="assignment-header">
+    <div class="page-eyebrow">Assignment</div>
+    <h1 class="page-title">{{ assignment.title }}</h1>
+    <p class="page-sub assignment-desc">{{ assignment.description }}</p>
+  </section>
+
+  <section>
+    <h2 class="section-head">Assignment files</h2>
+    <div class="card">
+      <div class="file-list">
+        {% for file in assignment.files.all %}
+          <div class="file-row">
+            <div class="file-meta">
+              <a href="{{ file.file.url }}" target="_blank" rel="noopener noreferrer" class="file-link">
+                {{ file.file.name|cut:"assignments/" }}
+              </a>
+              <span class="meta-muted">Provided by your instructor</span>
+            </div>
+            <a href="{{ file.file.url }}" class="btn btn-primary" download>Download</a>
+          </div>
+        {% empty %}
+          <div class="empty">No files attached.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-head">Your submission</h2>
+    <div class="card">
+      {% if submission %}
+        <div class="submission-top">
+          <div class="file-meta">
+            <a href="{{ submission.file.url }}" target="_blank" rel="noopener noreferrer" class="file-link">
+              {{ submission.file.name|cut:"submissions/" }}
+            </a>
+            <span class="meta-muted">Submitted: {{ submission.submitted_at|date:"M d, Y H:i" }}</span>
+          </div>
+
+          <div class="submission-actions">
+            <a href="{{ submission.file.url }}" class="btn btn-primary" download>Download</a>
+            {% if submission.grade is not None %}
+              <span class="pill pill-grade">Grade: {{ submission.grade }}/100</span>
+            {% else %}
+              <span class="pill">Awaiting grade</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="resubmit-box">
+          <p class="page-sub">Need to upload a better version? You can resubmit below.</p>
+          <form method="POST" action="{% url 'classes:submit_assignment' assignment.id %}" enctype="multipart/form-data" class="upload-form">
+            {% csrf_token %}
+            <label class="upload-label">
+              Choose file
+              <input
+                type="file"
+                name="file"
+                required
+                style="display:none;"
+                onchange="this.parentElement.querySelector('span').textContent = this.files[0].name"
+              >
+              <span>No file chosen</span>
+            </label>
+            <button type="submit" class="btn btn-primary" style="background:var(--accent2);">Resubmit</button>
+          </form>
+        </div>
+      {% else %}
+        <p class="empty" style="margin-bottom:14px;">You have not submitted this assignment yet.</p>
+        <form method="POST" action="{% url 'classes:submit_assignment' assignment.id %}" enctype="multipart/form-data" class="upload-form">
+          {% csrf_token %}
+          <label class="upload-label">
+            Choose file
+            <input
+              type="file"
+              name="file"
+              required
+              style="display:none;"
+              onchange="this.parentElement.querySelector('span').textContent = this.files[0].name"
+            >
+            <span>No file chosen</span>
+          </label>
+          <button type="submit" class="btn btn-primary" style="background:var(--accent2);">Submit</button>
+        </form>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+{% endblock %}

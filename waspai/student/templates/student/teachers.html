@@ -1,0 +1,44 @@
+{% extends 'student/base.html' %}
+
+{% block title %}Teachers — EduPlatform{% endblock %}
+
+{% block content %}
+<style>
+  .teacher-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 18px; }
+  .teacher-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .teacher-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .teacher-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; }
+  .teacher-name { margin: 0; font-family: 'Playfair Display', serif; font-size: 18px; }
+  .teacher-count { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .class-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .class-pill { padding: 4px 10px; border-radius: 999px; background: var(--bg-surface); border: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
+</style>
+
+<div class="page-eyebrow">Learning</div>
+<h1 class="page-title">Teachers</h1>
+<p class="page-sub">Teachers connected to your enrolled classes.</p>
+
+{% if teacher_cards %}
+  <div class="teacher-grid">
+    {% for item in teacher_cards %}
+      <div class="teacher-card">
+        <div class="teacher-head">
+          <div class="teacher-avatar">{{ item.teacher.user.username|first|upper }}</div>
+          <div>
+            <h2 class="teacher-name">{{ item.teacher.user.get_full_name|default:item.teacher.user.username }}</h2>
+            <div class="teacher-count">{{ item.class_count }} class{{ item.class_count|pluralize }}</div>
+          </div>
+        </div>
+
+        <div class="class-list">
+          {% for class_obj in item.classes|slice:":3" %}
+            <span class="class-pill">{{ class_obj.name }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card" style="margin-top:14px;">You have not joined any classes yet.</div>
+{% endif %}
+{% endblock %}

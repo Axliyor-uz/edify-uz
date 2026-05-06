@@ -1,0 +1,231 @@
+{% extends 'student/base.html' %}
+
+{% block title %}{{ class.name }} — Class{% endblock %}
+
+{% block content %}
+<style>
+  .class-overview {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .class-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .assignment-section-title {
+    margin: 0 0 14px;
+  }
+
+  .assignment-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .assignment-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .assignment-description {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .attachments {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+  }
+
+  .attachments-title {
+    margin: 0 0 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+  }
+
+  .attachments-list {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+  }
+
+  .attachments-link {
+    color: var(--accent);
+    font-size: 13px;
+  }
+
+  .assignment-actions {
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+
+  .submit-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .file-upload {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+
+  .file-upload span {
+    color: var(--text-muted);
+    font-size: 12px;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .submitted-note {
+    color: #66e8d0;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .status-success {
+    background: rgba(0, 201, 167, 0.12);
+    border-color: rgba(0, 201, 167, 0.26);
+    color: #66e8d0;
+  }
+
+  .status-pending {
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 700px) {
+    .assignment-top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .submit-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .submit-form .btn {
+      justify-content: center;
+    }
+  }
+</style>
+
+<section class="class-overview">
+  <div class="page-eyebrow">Class</div>
+  <h1 class="page-title">{{ class.name }}</h1>
+  <p class="page-sub">
+    Instructor:
+    {% if class.teacher and class.teacher.user %}
+      {{ class.teacher.user.username }}
+    {% else %}
+      Unknown
+    {% endif %}
+  </p>
+  <p class="page-sub">{{ class.bio|default:"No description available." }}</p>
+  <div class="class-meta">
+    <span class="pill">{{ assignments|length }} assignment{{ assignments|length|pluralize }}</span>
+    <span class="pill">Track your submissions in one place</span>
+  </div>
+</section>
+
+<h2 class="card-title assignment-section-title">Assignments</h2>
+
+{% if assignments %}
+  <div class="classes-list">
+    {% for a in assignments %}
+      <article class="enroll-card assignment-card">
+        <div class="enroll-stripe {% if a.id in submitted_ids %}submitted{% endif %}"></div>
+
+        <div class="enroll-body">
+          <div class="assignment-top">
+            <div>
+              <h3 class="enroll-name">{{ a.title }}</h3>
+              <div class="enroll-teacher">Created by {{ a.teacher.user.username }}</div>
+            </div>
+
+            {% if a.id in submitted_ids %}
+              <span class="pill status-success">Submitted</span>
+            {% else %}
+              <span class="pill status-pending">Not submitted</span>
+            {% endif %}
+          </div>
+
+          <p class="page-sub assignment-description">{{ a.description|default:"No description provided." }}</p>
+
+          {% if a.files.all %}
+            <div class="attachments">
+              <p class="attachments-title">Attached files</p>
+              <ul class="attachments-list">
+                {% for f in a.files.all %}
+                  <li>
+                    <a class="attachments-link" href="{{ f.file.url }}" target="_blank" rel="noopener noreferrer">
+                      {{ f.file.name|cut:"assignments/" }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          <div class="assignment-actions">
+            {% if a.id not in submitted_ids %}
+              <form class="submit-form" method="POST" action="{% url 'classes:submit_assignment' a.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label class="file-upload">
+                  Select file
+                  <input
+                    type="file"
+                    name="file"
+                    required
+                    style="display:none;"
+                    onchange="this.parentElement.querySelector('span').textContent = this.files[0].name"
+                  >
+                  <span>No file chosen</span>
+                </label>
+                <button type="submit" class="btn btn-primary">Submit assignment</button>
+                <a href="{% url 'classes:assignment_detail' a.id %}" class="btn">View details</a>
+              </form>
+            {% else %}
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span class="submitted-note">Your answer is submitted.</span>
+                <a href="{% url 'classes:assignment_detail' a.id %}" class="btn">View details</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <h3>No assignments yet</h3>
+    <p>The teacher has not created assignments for this class.</p>
+  </div>
+{% endif %}
+
+{% endblock %}

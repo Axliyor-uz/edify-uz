@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Error{% endblock %}</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #f1f5f9;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .code {
+            font-size: 90px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: 28px;
+        }
+
+        p {
+            margin: 15px 0 30px;
+            color: #cbd5f5;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .home {
+            background: #38bdf8;
+            color: black;
+        }
+
+        .home:hover {
+            background: #0ea5e9;
+        }
+
+        .back {
+            border: 1px solid #64748b;
+            color: #cbd5f5;
+        }
+
+        .back:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="code">500</div>
+        <h1>Server error</h1>
+        <p>Oops! Something went wrong on our side. We're working to fix it.</p>
+
+        <div class="buttons">
+            <a href="/" class="home">Home</a>
+            <a href="javascript:history.back()" class="back">Go Back</a>
+        </div>
+
+        <footer>
+            © WaspAi
+        </footer>
+    </div>
+</body>
+</html>
